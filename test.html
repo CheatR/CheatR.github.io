@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <title>Twitch online/offline (API tokennel)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; background:#0f1220; color:#e7e7ea; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; }
+    .card { background:#161a2b; padding:24px 28px; border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,.4); min-width:320px; }
+    h1 { font-size:18px; margin:0 0 12px; opacity:.9; }
+    .status { font-size:32px; font-weight:800; margin:8px 0 0; }
+    .online { color:#22c55e; }
+    .offline { color:#ef4444; }
+    .small { font-size:12px; opacity:.65; margin-top:10px; }
+    button { margin-top:12px; padding:8px 12px; border:0; border-radius:10px; background:#7c3aed; color:white; font-weight:600; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Twitch státusz – <span id="channelName"></span></h1>
+    <div id="status" class="status">Bejelentkezés szükséges…</div>
+    <div id="info" class="small"></div>
+    <button id="loginBtn" style="display:none;">Bejelentkezés Twitchre</button>
+  </div>
+
+<script>
+/** ——— ÁLLÍTSD BE EZT A KÉT SORT ——— **/
+const CLIENT_ID = "qy9r3qgvq0em40db63not4b8ryu9ol";
+const CHANNEL = "cheatr__"; // pl. "shroud"
+/** ———————————————————————————————— **/
+
+document.getElementById("channelName").textContent = CHANNEL;
+
+const AUTH_BASE = "https://id.twitch.tv/oauth2/authorize";
+const REDIRECT_URI = "https://cheatr.github.io/test.html"; // ugyanaz az oldal
+const SCOPES = []; // nincs szükség scope-ra a /streams-hez
+
+function login() {
+  const params = new URLSearchParams({
+    client_id: CLIENT_ID,
+    redirect_uri: REDIRECT_URI,
+    response_type: "token",      // Implicit Flow
+    scope: SCOPES.join(" "),
+    force_verify: "true",
+    state: Math.random().toString(36).slice(2),
+  });
+  window.location.href = `${AUTH_BASE}?${params.toString()}`;
+}
+
+function parseHash() {
+  if (!location.hash.startsWith("#")) return null;
+  const p = new URLSearchParams(location.hash.slice(1));
+  if (!p.get("access_token")) return null;
+  return {
+    access_token: p.get("access_token"),
+    expires_in: Number(p.get("expires_in") || "0"),
+    scope: (p.get("scope") || "").split("+").filter(Boolean),
+    token_type: p.get("token_type") || "bearer",
+    obtained_at: Date.now(),
+  };
+}
+
+function saveToken(tok) {
+  sessionStorage.setItem("twitch_token", JSON.stringify(tok));
+}
+
+function loadToken() {
+  const raw = sessionStorage.getItem("twitch_token");
+  if (!raw) return null;
+  const tok = JSON.parse(raw);
+  const ageSec = (Date.now() - (tok.obtained_at || 0)) / 1000;
+  if (tok.expires_in && ageSec > tok.expires_in - 60) {
+    // lejárt / mindjárt lejár
+    sessionStorage.removeItem("twitch_token");
+    return null;
+  }
+  return tok;
+}
+
+async function checkStatus(tokenObj) {
+  const s = document.getElementById("status");
+  const info = document.getElementById("info");
+  s.textContent = "Ellenőrzés…";
+  s.className = "status";
+
+  try {
+    const res = await fetch(`https://api.twitch.tv/helix/streams?user_login=${encodeURIComponent(CHANNEL)}`, {
+      headers: {
+        "Client-Id": CLIENT_ID,
+        "Authorization": `Bearer ${tokenObj.access_token}`,
+      },
+      cache: "no-store",
+    });
+
+    if (res.status === 401) { // lejárt/érvénytelen token
+      sessionStorage.removeItem("twitch_token");
+      document.getElementById("loginBtn").style.display = "inline-block";
+      s.textContent = "Token lejárt – jelentkezz be újra.";
+      return;
+    }
+
+    const data = await res.json();
+    const live = data?.data && data.data.length > 0 ? data.data[0] : null;
+
+    if (live) {
+      s.textContent = "ONLINE";
+      s.className = "status online";
+      info.textContent = `Cím: ${live.title} • Nézők: ${live.viewer_count}`;
+    } else {
+      s.textContent = "OFFLINE";
+      s.className = "status offline";
+      info.textContent = "A csatorna jelenleg nem él.";
+    }
+  } catch (e) {
+    s.textContent = "Hiba a lekérdezésnél.";
+    info.textContent = String(e);
+  }
+}
+
+(function init() {
+  // Ha most jöttünk vissza a Twitchtől, mentsük a tokent
+  const fromHash = parseHash();
+  if (fromHash) {
+    saveToken(fromHash);
+    // töröljük a hash-t a szebb URL miatt
+    history.replaceState(null, "", REDIRECT_URI);
+  }
+
+  const tok = loadToken();
+  if (!tok) {
+    // nincs token -> kérjünk bejelentkezést
+    document.getElementById("loginBtn").style.display = "inline-block";
+    document.getElementById("loginBtn").onclick = login;
+    document.getElementById("status").textContent = "Bejelentkezés szükséges…";
+    return;
+  }
+
+  // Van token -> indulhat a státusz lekérdezés
+  checkStatus(tok);
+  // 60 mp-enként frissít
+  setInterval(() => {
+    const t = loadToken();
+    if (!t) {
+      document.getElementById("status").textContent = "Token lejárt – jelentkezz be újra.";
+      document.getElementById("loginBtn").style.display = "inline-block";
+      return;
+    }
+    checkStatus(t);
+  }, 60_000);
+})();
+</script>
+</body>
+</html>

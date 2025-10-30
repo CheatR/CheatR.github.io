@@ -4,14 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>ZeroRisk</title>
-  <meta name="description" content="Scrollra jobbról balra mozgó panelek névvel, leírással és gombbal." />
   <style>
     *{box-sizing:border-box} html,body{margin:0;padding:0}
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.55;color:#111;background:#fff}
 
     header,footer,.tw{margin:0 auto;padding:24px 16px}
     header{background:#1e1e1e;color:#fff;min-width: 100vw;height: 25vw;display:grid;}
-    .tw{background: #2e2e2e;color:#fff;min-width: 100vw;height: 40vw;display:grid;display:flex;justify-content: center;align-items: center;}
+    .tw{background: #2e2e2e;color:#fff;min-width: 100vw;height: 40vw;display:grid;display:flex;justify-content: center;flex-direction:column;align-items: center;}
     footer{max-width: 1000px;border-top:1px solid #eee;color:#666}
 
     /* --- PINELT HORIZONTÁLIS SZEKCIÓ --- */
@@ -62,7 +61,8 @@
   </header>
 
   <div class="tw">
-    <iframe src="https://player.twitch.tv/?channel=zerorisk_0r&parent=https://cheatr.github.io/&autoplay=false&muted=false&time=0s" width="60%" height="95%" frameborder="0" allowfullscreen></iframe>
+    <h1 id="twStatus">STATUS<br></h1>
+    <iframe src="https://player.twitch.tv/?channel=zerorisk_0r&parent=cheatr.github.io&autoplay=false&muted=false&time=0s" width="60%" height="90%" frameborder="0" allowfullscreen></iframe>
   </div>
 
   <!-- PINELT HORIZONTÁLIS RÉSZ -->
@@ -163,6 +163,25 @@
 
       document.getElementById('y').textContent = new Date().getFullYear();
     })();
+  async function check(login) {
+  document.getElementById("twStatus").textContent = "Ellenőrzés...";
+  const res = await fetch(`/twitch/status?user_login=${encodeURIComponent(login)}`);
+  const data = await res.json();
+  if (!res.ok) {
+    document.getElementById("twStatus").textContent = "Hiba: " + (data.error || res.status);
+    return;
+    }
+  document.getElementById("twStatus").textContent =
+    data.online
+      ? `ONLINE – "${data.title}" (${data.viewer_count} néző)`
+      : "OFFLINE";
+  }
+
+  const input = document.getElementById("channel");
+
+  setInterval(() => check(input.value), 60_000); // 60 mp
+  check(input.value);
   </script>
+  <script src="script.js"></script>
 </body>
 </html>
