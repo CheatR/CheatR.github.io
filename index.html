@@ -8,10 +8,14 @@
     *{box-sizing:border-box} html,body{margin:0;padding:0}
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.55;color:#111;background:#fff}
 
-    header,footer,.tw{margin:0 auto;padding:24px 16px}
+    header,footer,.contacts,.tw{margin:0 auto;padding:24px 16px}
     header{background:#1e1e1e;color:#fff;min-width: 100vw;height: 25vw;display:grid;}
-    .tw{background: #2e2e2e;color:#fff;min-width: 100vw;height: 40vw;display:grid;display:flex;justify-content: center;flex-direction:column;align-items: center;}
+    .tw{background: #2e2e2e;color:#fff;min-width: 100vw;height: 40vw;display:flex;justify-content: center;flex-direction:column;align-items: center;}
+    .contacts{background: #1e1e1e;color:#fff;min-width: 100vw;height: 10vw;display:flex;justify-content: center;flex-direction:column;align-items: center}
+    .contacts div{margin:20px;padding:20px;display:flex;justify-content: center;align-items: center;flex-direction: row;}
     footer{max-width: 1000px;border-top:1px solid #eee;color:#666}
+
+    .contact{max-width:50px;max-height:50px;margin:10px;}
 
     /* --- PINELT HORIZONTÁLIS SZEKCIÓ --- */
     .pin-section{position:relative;height:100vh;background:#0b0b0b;color:#fff}
@@ -47,12 +51,25 @@
       .panel{grid-template-columns:1fr;grid-auto-rows:minmax(0,auto);align-content:stretch}
       .panel__text{padding:22px}
       .panel__media{height:52vh}
+      .contacts{height:20vw}
     }
 
     @media (prefers-reduced-motion: reduce){
       .h-wrap{transition:none!important}
       .panel__media img{transform:none}
     }
+
+    .glow {
+      font-size: 25px;
+      color: #fff;
+      animation: breathe 3s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%,100% { text-shadow: 0 0 8px #00eaff; }
+      50%     { text-shadow: 0 0 18px #00eaff; }
+    }
+
   </style>
 </head>
 <body>
@@ -61,8 +78,17 @@
   </header>
 
   <div class="tw">
-    <h1 id="twStatus">STATUS<br></h1>
     <iframe src="https://player.twitch.tv/?channel=zerorisk_0r&parent=cheatr.github.io&autoplay=false&muted=false&time=0s" width="60%" height="90%" frameborder="0" allowfullscreen></iframe>
+  </div>
+
+  <div class="contacts">
+    <div>
+      <a href="instagram.com"><img class="contact" src="images/insta.webp" alt="Instagram"></a>
+      <a href="tiktok.com"><img class="contact" src="images/tiktok.png" alt="TikTok"></a>
+      <a href="youtube.com"><img class="contact" src="images/yt.webp" alt="YouTube"></a>
+      <a href="twitch.tv"><img class="contact" src="images/tw.webp" alt="Twitch"></a>
+      <a href="https://discord.gg/PrrxqNDA"><img class="contact" src="images/dc.webp" alt="Discord"></a>
+    </div>
   </div>
 
   <!-- PINELT HORIZONTÁLIS RÉSZ -->
@@ -78,28 +104,27 @@
           <!-- PANEL 1 -->
           <section class="panel" style="--bg:#120D1C">
             <div class="panel__text">
-              <span class="panel__eyebrow">ÚJ</span>
+              <span class="panel__eyebrow glow">ÚJ</span>
               <h2 class="panel__title">WinSpirit</h2>
               <p class="panel__desc">NO KYC</br>ASD</p>
               <a class="panel__btn" href="#tovabb-1">REGISZTRÁLOK</a>
             </div>
             <figure class="panel__media">
-              <img src="casi1.webp" alt="winspirit casi" loading="lazy">
-              <figcaption class="panel__credit">új</figcaption>
+              <img src="images/casi1.webp" alt="winspirit casi" loading="lazy">
+              <!--<figcaption class="panel__credit">új</figcaption> -->
             </figure>
           </section>
 
           <!-- PANEL 2 -->
           <section class="panel" style="--bg:#000">
             <div class="panel__text">
-              <span class="panel__eyebrow">ÚJ</span>
+              <span class="panel__eyebrow glow">ÚJ</span>
               <h2 class="panel__title">Flappy Casino</h2>
               <p class="panel__desc">fasz</p>
               <a class="panel__btn" href="#tovabb-2">REGISZTRÁLOK</a>
             </div>
             <figure class="panel__media">
-              <img src="Flappy-Casino.svg" alt="flappy casi" loading="lazy">
-              <figcaption class="panel__credit">ÚJ</figcaption>
+              <img src="images/Flappy-Casino.svg" alt="flappy casi" loading="lazy">
             </figure>
           </section>
 
@@ -163,25 +188,6 @@
 
       document.getElementById('y').textContent = new Date().getFullYear();
     })();
-  async function check(login) {
-  document.getElementById("twStatus").textContent = "Ellenőrzés...";
-  const res = await fetch(`/twitch/status?user_login=${encodeURIComponent(login)}`);
-  const data = await res.json();
-  if (!res.ok) {
-    document.getElementById("twStatus").textContent = "Hiba: " + (data.error || res.status);
-    return;
-    }
-  document.getElementById("twStatus").textContent =
-    data.online
-      ? `ONLINE – "${data.title}" (${data.viewer_count} néző)`
-      : "OFFLINE";
-  }
-
-  const input = document.getElementById("channel");
-
-  setInterval(() => check(input.value), 60_000); // 60 mp
-  check(input.value);
   </script>
-  <script src="script.js"></script>
 </body>
 </html>
