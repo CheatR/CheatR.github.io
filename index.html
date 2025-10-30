@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ZeroRisk</title>
+  <meta name="description" content="Scrollra jobbról balra mozgó panelek névvel, leírással és gombbal." />
+  <style>
+    *{box-sizing:border-box} html,body{margin:0;padding:0}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.55;color:#111;background:#fff}
+
+    header,footer,.tw{margin:0 auto;padding:24px 16px}
+    header{background:#1e1e1e;color:#fff;min-width: 100vw;height: 25vw;display:grid;}
+    .tw{background: #2e2e2e;color:#fff;min-width: 100vw;height: 25vw;display:grid;}
+    footer{max-width: 1000px;border-top:1px solid #eee;color:#666}
+
+    /* --- PINELT HORIZONTÁLIS SZEKCIÓ --- */
+    .pin-section{position:relative;height:100vh;background:#0b0b0b;color:#fff}
+    .pin-sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:grid;grid-template-rows:auto 1fr}
+    .pin-header{padding:18px 16px;opacity:.9}
+
+    .h-wrap{height:100%;will-change:transform}
+    .h-track{display:flex;align-items:stretch;height:100%}
+
+    /* PANEL: 2 hasáb — bal szöveg, jobb kép (mobilon egymás alatt) */
+    .panel{
+      --bg:#111; /* alap, de panelenként felülírjuk inline változóval */
+      min-width:100vw;height:100%;display:grid;grid-template-columns:1fr 1.2fr;
+      background:var(--bg);color:#fff;
+    }
+    .panel__text{
+      display:flex;flex-direction:column;justify-content:center;gap:14px;padding:32px;max-width:720px
+    }
+    .panel__eyebrow{letter-spacing:.08em;text-transform:uppercase;opacity:.8;font-size:12px}
+    .panel__title{font-size:clamp(22px,4.2vw,44px);line-height:1.1;margin:0}
+    .panel__desc{margin:0;opacity:.95}
+    .panel__btn{
+      display:inline-block;align-self:flex-start;margin-top:6px;
+      padding:12px 16px;border-radius:10px;text-decoration:none;font-weight:600;
+      background:#fff;color:#111;box-shadow:0 6px 18px rgba(0,0,0,.15)
+    }
+    .panel__media{position:relative;overflow:hidden}
+    .panel__media img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.04)}
+    .panel__credit{position:absolute;right:10px;bottom:10px;font-size:12px;opacity:.7;background:rgba(0,0,0,.35);padding:6px 8px;border-radius:8px}
+
+    /* Kisebb kijelzők: egymás alá rendezés a panelen belül */
+    @media (max-width: 860px){
+      .panel{grid-template-columns:1fr;grid-auto-rows:minmax(0,auto);align-content:stretch}
+      .panel__text{padding:22px}
+      .panel__media{height:52vh}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .h-wrap{transition:none!important}
+      .panel__media img{transform:none}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ZeroRisk</h1>
+  </header>
+
+  <div class="tw">
+    <iframe src="https://player.twitch.tv/?channel=zerorisk_0r&parent=http://127.0.0.1:5500/&autoplay=false&muted=false&time=0s" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+  </div>
+
+  <!-- PINELT HORIZONTÁLIS RÉSZ -->
+  <section class="pin-section" id="pin">
+    <div class="pin-sticky">
+      <div class="pin-header">
+        <strong>Kaszinók</strong>
+      </div>
+
+      <div class="h-wrap" id="hWrap">
+        <div class="h-track" id="hTrack">
+
+          <!-- PANEL 1 -->
+          <section class="panel" style="--bg:#120D1C">
+            <div class="panel__text">
+              <span class="panel__eyebrow">új</span>
+              <h2 class="panel__title">WinSpirit</h2>
+              <p class="panel__desc">NO KYC</br>ASD</p>
+              <a class="panel__btn" href="#tovabb-1">JÁTÉK</a>
+            </div>
+            <figure class="panel__media">
+              <img src="casi1.webp" alt="Hajnali hegygerincek" loading="lazy">
+              <figcaption class="panel__credit">új</figcaption>
+            </figure>
+          </section>
+
+          <!-- PANEL 2 -->
+          <section class="panel" style="--bg:#14532d">
+            <div class="panel__text">
+              <span class="panel__eyebrow">Portfólió</span>
+              <h2 class="panel__title">Városi éjszakák</h2>
+              <p class="panel__desc">Neonfények és hosszú expozíciók. Írj ide projektleírást, érdekességeket vagy CTA előtti indoklást.</p>
+              <a class="panel__btn" href="#tovabb-2">Részletek</a>
+            </div>
+            <figure class="panel__media">
+              <img src="https://picsum.photos/seed/22/2000/1200" alt="Városi éjszakák" loading="lazy">
+              <figcaption class="panel__credit">Kép 2</figcaption>
+            </figure>
+          </section>
+
+          <!-- PANEL 3 -->
+          <section class="panel" style="--bg:#7c2d12">
+            <div class="panel__text">
+              <span class="panel__eyebrow">Esettanulmány</span>
+              <h2 class="panel__title">Sivatagi út</h2>
+              <p class="panel__desc">Letisztult kompozíció és erős perspektíva. A leírás lehet 1–3 mondat.</p>
+              <a class="panel__btn" href="#tovabb-3">Olvasom</a>
+            </div>
+            <figure class="panel__media">
+              <img src="https://picsum.photos/seed/33/2000/1200" alt="Sivatagi út" loading="lazy">
+              <figcaption class="panel__credit">Kép 3</figcaption>
+            </figure>
+          </section>
+
+          <!-- PANEL 4 -->
+          <section class="panel" style="--bg:#1f2937">
+            <div class="panel__text">
+              <span class="panel__eyebrow">Kiállítás</span>
+              <h2 class="panel__title">Tengerpart vihar előtt</h2>
+              <p class="panel__desc">Mélykék tónusok és finom szemcsézettség. CTA alá mehet pl. letöltés vagy feliratkozás.</p>
+              <a class="panel__btn" href="#tovabb-4">Jegyek</a>
+            </div>
+            <figure class="panel__media">
+              <img src="https://picsum.photos/seed/44/2000/1200" alt="Tengerpart vihar előtt" loading="lazy">
+              <figcaption class="panel__credit">Kép 4</figcaption>
+            </figure>
+          </section>
+
+          <!-- PANEL 5 -->
+          <section class="panel" style="--bg:#3b0764">
+            <div class="panel__text">
+              <span class="panel__eyebrow">Blog</span>
+              <h2 class="panel__title">Erdei ösvény</h2>
+              <p class="panel__desc">Moha, szórt fény, hűvös paletta. Itt egy rövid bevezető a cikkhez vagy galériához.</p>
+              <a class="panel__btn" href="#tovabb-5">Ugrás a cikkre</a>
+            </div>
+            <figure class="panel__media">
+              <img src="https://picsum.photos/seed/55/2000/1200" alt="Erdei ösvény" loading="lazy">
+              <figcaption class="panel__credit">Kép 5</figcaption>
+            </figure>
+          </section>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="spacer">
+    <h2 id="tovabb-1">Utána normál tartalom</h2>
+    <p>Amint az utolsó panel is „leért”, a sticky rész elengedi a scrollt.</p>
+  </div>
+
+  <footer>
+    © <span id="y"></span> csetry
+  </footer>
+
+  <script>
+    (function(){
+      const section = document.getElementById('pin');
+      const hWrap   = document.getElementById('hWrap');
+      const hTrack  = document.getElementById('hTrack');
+
+      let startY = 0;
+      let extraScroll = 0;
+
+      const clamp = (v,min,max)=>Math.min(Math.max(v,min),max);
+
+      function recalc(){
+        const totalWidth = hTrack.scrollWidth;
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+
+        const horizDistance = Math.max(0, totalWidth - vw);
+        extraScroll = horizDistance;
+
+        section.style.height = (vh + extraScroll) + 'px';
+        startY = window.scrollY + section.getBoundingClientRect().top;
+
+        onScroll();
+      }
+
+      function onScroll(){
+        const y = window.scrollY;
+        const progress = clamp(y - startY, 0, extraScroll);
+        hWrap.style.transform = 'translateX(' + (-progress) + 'px)';
+      }
+
+      window.addEventListener('resize', recalc, { passive:true });
+      window.addEventListener('orientationchange', recalc, { passive:true });
+      window.addEventListener('scroll', onScroll, { passive:true });
+      window.addEventListener('load', recalc);
+
+      // Ha képek betöltődnek, frissítsünk
+      const imgs = hTrack.querySelectorAll('img');
+      imgs.forEach(img=>{
+        if(img.complete) return;
+        img.addEventListener('load', recalc);
+        img.addEventListener('error', recalc);
+      });
+
+      document.getElementById('y').textContent = new Date().getFullYear();
+    })();
+  </script>
+</body>
+</html>
