@@ -6,70 +6,230 @@
   <title>ZeroRisk</title>
   <style>
     *{box-sizing:border-box} html,body{margin:0;padding:0}
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.55;color:#111;background:#fff}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.55;color:#111;background:#fff;max-width: 200vh;}
 
     header,footer,.contacts,.tw{margin:0 auto;padding:24px 16px}
-    header{background:#1e1e1e;color:#fff;min-width: 100vw;height: 25vw;display:grid;}
-    .tw{background: #2e2e2e;color:#fff;min-width: 100vw;height: 40vw;display:flex;justify-content: center;flex-direction:column;align-items: center;}
-    .contacts{background: #1e1e1e;color:#fff;min-width: 100vw;height: 10vw;display:flex;justify-content: center;flex-direction:column;align-items: center}
+    header{background:#1e1e1e;color:#fff;min-width: 98vw;height: 25vw;display:grid;}
+    .tw{background: #2e2e2e;color:#fff;min-width: 98vw;height: 40vw;display:flex;justify-content: center;flex-direction:column;align-items: center;}
+    .contacts{background: #1e1e1e;color:#fff;min-width: 98vw;height: 10vw;display:flex;justify-content: center;flex-direction:column;align-items: center}
     .contacts div{margin:20px;padding:20px;display:flex;justify-content: center;align-items: center;flex-direction: row;}
-    footer{max-width: 1000px;border-top:1px solid #eee;color:#666}
+    footer{max-width: 1000px;border-top:1px solid #eee;color:#1e1e1e;justify-content: center;align-items: center;display: flex;}
 
     .contact{max-width:50px;max-height:50px;margin:10px;}
 
-    /* --- PINELT HORIZONTÁLIS SZEKCIÓ --- */
-    .pin-section{position:relative;height:100vh;background:#0b0b0b;color:#fff}
-    .pin-sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:grid;grid-template-rows:auto 1fr}
-    .pin-header{padding:18px 16px;opacity:.9}
-
-    .h-wrap{height:100%;will-change:transform}
-    .h-track{display:flex;align-items:stretch;height:100%}
-
-    /* PANEL: 2 hasáb — bal szöveg, jobb kép (mobilon egymás alatt) */
-    .panel{
-      --bg:#111; /* alap, de panelenként felülírjuk inline változóval */
-      min-width:100vw;height:100%;display:grid;grid-template-columns:1fr 1.2fr;
-      background:var(--bg);color:#fff;
-    }
-    .panel__text{
-      display:flex;flex-direction:column;justify-content:center;gap:14px;padding:32px;max-width:720px
-    }
-    .panel__eyebrow{letter-spacing:.08em;text-transform:uppercase;opacity:.8;font-size:12px}
-    .panel__title{font-size:clamp(22px,4.2vw,44px);line-height:1.1;margin:0}
-    .panel__desc{margin:0;opacity:.95}
-    .panel__btn{
-      display:inline-block;align-self:flex-start;margin-top:6px;
-      padding:12px 16px;border-radius:10px;text-decoration:none;font-weight:600;
-      background:#fff;color:#111;box-shadow:0 6px 18px rgba(0,0,0,.15)
-    }
-    .panel__media{position:relative;overflow:hidden}
-    .panel__media img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.04)}
-    .panel__credit{position:absolute;right:10px;bottom:10px;font-size:12px;opacity:.7;background:rgba(0,0,0,.35);padding:6px 8px;border-radius:8px}
-
-    /* Kisebb kijelzők: egymás alá rendezés a panelen belül */
-    @media (max-width: 860px){
-      .panel{grid-template-columns:1fr;grid-auto-rows:minmax(0,auto);align-content:stretch}
-      .panel__text{padding:22px}
-      .panel__media{height:52vh}
-      .contacts{height:20vw}
+    .casinos{
+        background-color: #2e2e2e;
     }
 
-    @media (prefers-reduced-motion: reduce){
-      .h-wrap{transition:none!important}
-      .panel__media img{transform:none}
+    .pin-header{
+        padding:18px 16px;
+        opacity:.9;
+        background-color: #2e2e2e;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        display: flex;
+        font-size: 30px;
     }
 
-    .glow {
-      font-size: 25px;
+    .container {
+        padding: 50px 0px;
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 50px;
+        display: block;
+        justify-items: center;
+        align-items: center;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .parent {
+        height: 500px;
+        width: 400px;
+        padding: 20px;
+        perspective: 1000px;
+    }
+
+    .card {
+        padding-top: 100px;
+        transform-style: preserve-3d;
+        background-image: url("images/nv.casino.png");
+        background-position: center center;
+        width: 100%;
+        height: 100%;
+        transition: all 0.5s ease-in-out;
+        border-radius: 10px;
+    }
+
+    .card:hover {
+        transform: rotate3d(-10, 0, 0, 10deg);
+    }
+
+    .content-box {
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.811);
+        border-radius: 0px 0px 10px 10px;
+        box-shadow: rgb(255, 47, 137) 0px 20px 50px -25px;
+        transition: all 0.5s ease-in-out;
+        padding: 50px 25px 25px 25px;
+        transform-style: preserve-3d;
+    }
+
+    .card2::before {
+      background-image: url('images/nv.casino.png');
+    }
+
+    .card-title {
+        color: white;
+        font-size: 25px;
+        font-weight: 900;
+        transform: translate3d(0px, 0px, 20px);
+    }
+
+    .card-content {
+        padding-top: 15px;
+        font-size: 12px;
+        color: rgb(185, 185, 185);
+        transform: translate3d(0px, 0px, 20px);
+    }
+
+    .see-more {
+        display: block;
+        font-weight: 900;
+        font-size: 11px;
+        text-transform: uppercase;
+        color: rgb(255, 47, 137);
+        padding-top: 15px;
+        transform: translate3d(0px, 0px, 20px);
+    }
+
+    a {
+        text-decoration: none;
+        color:rgb(255, 47, 137);
+    }
+
+    .date-box {
+        position: absolute;
+        top: 75px;
+        left: 25px;
+        height: 60px;
+        width: 60px;
+        background-color: black;
+        border-radius: 10px;
+        padding: 12px;
+        box-shadow: rgb(255, 47, 137) 0px 20px 60px 0px, rgb(255, 123, 180) 0px 18px 36px -18px;
+        transform: translate3d(0px, 0px, 50px);
+    }
+
+    .date-box span {
+        display: block;
+        text-align: center;
+    }
+
+    .tag {
+        padding-top:15px;
+        font-size: 19px;
+        font-weight: 900;
+        color: rgb(255, 47, 137);
+    }
+
+    .card2 {
+      filter: hue-rotate(150deg);
+    }
+
+
+    body.noscroll {
+      overflow: hidden;
+    }
+
+    .cookie-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .cookie-modal {
+      background: #1e1e1e;
       color: #fff;
-      animation: breathe 3s ease-in-out infinite;
+      padding: 24px 28px;
+      border-radius: 12px;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+      text-align: left;
+      font-size: 14px;
     }
 
-    @keyframes breathe {
-      0%,100% { text-shadow: 0 0 8px #00eaff; }
-      50%     { text-shadow: 0 0 18px #00eaff; }
+    .cookie-modal h2 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 20px;
     }
 
+    .cookie-modal p {
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-size: 13px;
+      color: #ccc;
+    }
+
+    .cookie-checkboxes {
+      margin-bottom: 16px;
+    }
+
+    .cookie-checkboxes label {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .cookie-checkboxes input[type="checkbox"] {
+      margin-top: 2px;
+    }
+
+    .cookie-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .cookie-btn {
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .cookie-btn-primary {
+      background: rgb(255, 47, 137);
+      color: #fff;
+    }
+
+    .cookie-btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .cookie-btn-secondary {
+      background: #444;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
@@ -83,110 +243,119 @@
 
   <div class="contacts">
     <div>
-      <a href="instagram.com"><img class="contact" src="images/insta.webp" alt="Instagram"></a>
-      <a href="tiktok.com"><img class="contact" src="images/tiktok.png" alt="TikTok"></a>
-      <a href="youtube.com"><img class="contact" src="images/yt.webp" alt="YouTube"></a>
-      <a href="twitch.tv"><img class="contact" src="images/tw.webp" alt="Twitch"></a>
-      <a href="https://discord.gg/PrrxqNDA"><img class="contact" src="images/dc.webp" alt="Discord"></a>
+      <a href="https://www.instagram.com/zero.risk/" target="_blank"><img class="contact" src="images/insta.webp" alt="Instagram"></a>
+      <a href="https://t.me/zrkaszik" target="_blank"><img class="contact" src="images/telegram.webp" alt="Telegram"></a>
+      <a href="https://www.twitch.tv/zerorisk_0r" target="_blank"><img class="contact" src="images/tw.webp" alt="Twitch"></a>
+      <a href="https://discord.gg/PrrxqNDA" target="_blank"><img class="contact" src="images/dc.webp" alt="Discord"></a>
     </div>
   </div>
 
-  <!-- PINELT HORIZONTÁLIS RÉSZ -->
-  <section class="pin-section" id="pin">
-    <div class="pin-sticky">
+  <section class="casinos" id="pin">
+    <div>
       <div class="pin-header">
-        <strong>Kaszinók</strong>
+        <strong>Kaszinó partnereink</strong>
       </div>
 
-      <div class="h-wrap" id="hWrap">
-        <div class="h-track" id="hTrack">
+      <div class="container">
 
-          <!-- PANEL 1 -->
-          <section class="panel" style="--bg:#120D1C">
-            <div class="panel__text">
-              <span class="panel__eyebrow glow">ÚJ</span>
-              <h2 class="panel__title">WinSpirit</h2>
-              <p class="panel__desc">NO KYC</br>ASD</p>
-              <a class="panel__btn" href="#tovabb-1">REGISZTRÁLOK</a>
+        <!-- CARD 1 -->
+        <div class="parent">
+            <div class="card">
+            <div class="content-box">
+                <h1 class="card-title">NV Casino</h1>
+                <p class="card-content">valami<br>valami<br>valami</p>
+                <span class="see-more"><a href="https://nvpartnerspromo.com/l/692d921686816b9eb90b73b2" target="_blank">REGISZTRÁLOK</a></span>
             </div>
-            <figure class="panel__media">
-              <img src="images/casi1.webp" alt="winspirit casi" loading="lazy">
-              <!--<figcaption class="panel__credit">új</figcaption> -->
-            </figure>
-          </section>
+            <div class="date-box">
+                <span class="tag">ÚJ</span>
+            </div>
+            </div>
+        </div>
 
-          <!-- PANEL 2 -->
-          <section class="panel" style="--bg:#000">
-            <div class="panel__text">
-              <span class="panel__eyebrow glow">ÚJ</span>
-              <h2 class="panel__title">Flappy Casino</h2>
-              <p class="panel__desc">fasz</p>
-              <a class="panel__btn" href="#tovabb-2">REGISZTRÁLOK</a>
+        <!-- CARD 2
+        <div class="parent card2">
+            <div class="card card2">
+            <div class="content-box">
+                <h1 class="card-title">NV CASINO</h1>
+                <p class="card-content">valami<br>valami</p>
+                <span class="see-more"><a href="https://nvpartnerspromo.com/l/692d921686816b9eb90b73b2" target="_blank">REGISZTRÁLOK</a></span>
             </div>
-            <figure class="panel__media">
-              <img src="images/Flappy-Casino.svg" alt="flappy casi" loading="lazy">
-            </figure>
-          </section>
+            <div class="date-box">
+                <span class="tag">ÚJ</span>
+            </div>
+            </div>
+        </div>-->
 
         </div>
-      </div>
+
     </div>
   </section>
 
-  <div class="spacer">
-    <h2 id="tovabb-1">Sorsolás</h2>
-    <p>sors</p>
+  <!-- COOKIE / KORHATÁR MODAL -->
+  <div class="cookie-overlay" id="ageModal" style="display:none;">
+    <div class="cookie-modal">
+      <h2>Belépés előtt</h2>
+      <p>A ZeroRisk oldal tartalma csak 18 éven felülieknek, és nem Magyarországon élőknek szól.</p>
+
+      <div class="cookie-checkboxes">
+        <label>
+          <input type="checkbox" id="chk18">
+          <span>Kijelentem, hogy elmúltam 18 éves.</span>
+        </label>
+        <label>
+          <input type="checkbox" id="chkNotHu">
+          <span>Kijelentem, hogy nem Magyarországon élek.</span>
+        </label>
+      </div>
+
+      <div class="cookie-actions">
+        <button class="cookie-btn cookie-btn-secondary" id="exitBtn" type="button">
+          Mégsem lépek be
+        </button>
+        <button class="cookie-btn cookie-btn-primary" id="enterBtn" type="button" disabled>
+          Belépek
+        </button>
+      </div>
+    </div>
   </div>
 
   <footer>
-    © <span id="y"></span> csetry
+   <p>© <span id="y"></span> ZeroRisk</p>
   </footer>
 
   <script>
-    (function(){
-      const section = document.getElementById('pin');
-      const hWrap   = document.getElementById('hWrap');
-      const hTrack  = document.getElementById('hTrack');
+    document.getElementById('y').textContent = new Date().getFullYear();
 
-      let startY = 0;
-      let extraScroll = 0;
+    (function() {
+      const modal = document.getElementById('ageModal');
+      const chk18 = document.getElementById('chk18');
+      const chkNotHu = document.getElementById('chkNotHu');
+      const enterBtn = document.getElementById('enterBtn');
+      const exitBtn = document.getElementById('exitBtn');
 
-      const clamp = (v,min,max)=>Math.min(Math.max(v,min),max);
+      const accepted = localStorage.getItem('zr_age_confirmed');
 
-      function recalc(){
-        const totalWidth = hTrack.scrollWidth;
-        const vw = window.innerWidth;
-        const vh = window.innerHeight;
-
-        const horizDistance = Math.max(0, totalWidth - vw);
-        extraScroll = horizDistance;
-
-        section.style.height = (vh + extraScroll) + 'px';
-        startY = window.scrollY + section.getBoundingClientRect().top;
-
-        onScroll();
+      if (!accepted) {
+        modal.style.display = 'flex';
+        document.body.classList.add('noscroll'); 
       }
 
-      function onScroll(){
-        const y = window.scrollY;
-        const progress = clamp(y - startY, 0, extraScroll);
-        hWrap.style.transform = 'translateX(' + (-progress) + 'px)';
+      function updateButtonState() {
+        enterBtn.disabled = !(chk18.checked && chkNotHu.checked);
       }
 
-      window.addEventListener('resize', recalc, { passive:true });
-      window.addEventListener('orientationchange', recalc, { passive:true });
-      window.addEventListener('scroll', onScroll, { passive:true });
-      window.addEventListener('load', recalc);
+      chk18.addEventListener('change', updateButtonState);
+      chkNotHu.addEventListener('change', updateButtonState);
 
-      // Ha képek betöltődnek, frissítsünk
-      const imgs = hTrack.querySelectorAll('img');
-      imgs.forEach(img=>{
-        if(img.complete) return;
-        img.addEventListener('load', recalc);
-        img.addEventListener('error', recalc);
+      enterBtn.addEventListener('click', function() {
+        localStorage.setItem('zr_age_confirmed', '1');
+        modal.style.display = 'none';
+        document.body.classList.remove('noscroll'); 
       });
 
-      document.getElementById('y').textContent = new Date().getFullYear();
+      exitBtn.addEventListener('click', function() {
+        window.location.href = 'https://google.com';
+      });
     })();
   </script>
 </body>
